@@ -20,8 +20,8 @@ build()
 
 	rm -f .version
 
-	make ${IMAGE_NAME} || exit 1
-	make modules || exit 1
+	make ${IMAGE_NAME} -j || exit 1
+	make modules -j || exit 1
 	make all -C ../netatop-0.6 || exit 1
   ./mkimage -A x86 -O linux -T kernel -C gzip -n kernel -d ./arch/${ARCH}/boot/bzImage uImage || exit 1
 }
