@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# netatop	Startup script for the netatop kernel module and daemon
+#
+# chkconfig: 2345 84 16
+# description:	Gather per-process statistics about network utilization
+#
+### BEGIN INIT INFO
+# Provides:             netatop
+# Required-Start:	$local_fs
+# Required-Stop:	$local_fs
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description: Gather per-process statistics about network utilization
+# Description: Gather per-process statistics about network utilization
+### END INIT INFO
+
+RETVAL=0
+
+start() {
+	modprobe netatop
+
+	if [ -f /usr/sbin/netatopd ]; then
+		/usr/sbin/netatopd
+	fi
+}
+
+stop() {
+	PID=$(ps -e | grep netatopd | sed -e 's/^ *//' -e 's/ .*//')
+
+	if [ "$PID" ]
+	then
+		kill "$PID"
+	fi
+
+	modprobe -r netatop
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+
+  stop)
+	stop
+	;;
+
+  status)
+	cat /proc/netatop
+	;;
+
+  reload)
+	stop
+	start
+	;;
+
+  restart)
+	stop
+	start
+	;;
+
+  *)
+	echo "Usage: $0 [start|stop|status|reload|restart]"
+	exit 1
+esac

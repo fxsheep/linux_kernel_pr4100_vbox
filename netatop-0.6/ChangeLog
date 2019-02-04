@@ -1,0 +1,276 @@
+commit eba568b369605d4d525b05e0ae8f4faaa7a6466f
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Tue Aug 4 12:06:31 2015 +0200
+
+    Bug solution:
+    Arguments of the hook function have been modified in kernel version 4.1
+    resulting in a kernel panic.
+    Credits: David B. Lamkins
+
+M	module/netatop.c
+
+commit 01e87c5384c60188a419d3f37bb44c9a64ed2812
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sun Jan 18 14:15:21 2015 +0100
+
+    For kernel version >= 3.17, a 64-bit division fails on 32-bit systems.
+    The division is done now with div_64u().
+
+M	module/netatop.c
+
+commit cf0d3ea78fc87d938e6a15f3332912be9e43d252
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sat Nov 22 16:27:22 2014 +0100
+
+    The type of the first calling argument of the function
+    typedef nf_hookfn has been changed from an 'unsigned int'
+    to a 'const struct nf_hook_ops *' in kernel version 3.10
+    (or 3.13?). Kernel-version dependent code has been added.
+
+M	module/netatop.c
+
+commit 5481f03746c3e7e615032dc656601a353c012306
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sat Nov 22 15:57:35 2014 +0100
+
+    The member 'real_start_time' in the task_struct has been modified
+    from a 'struct timespec' to a 'u64' (in nanoseconds) in kernel 3.17.
+    Kernel-version dependent code has been added to handle this.
+
+M	module/netatop.c
+
+commit a159daa73e53e0717887b687763d7cca5f7d23de
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Feb 7 10:38:21 2014 +0100
+
+    Added zlib1-dev for Debian derivatives.
+
+M	README
+
+commit f72c6ae6b7f3b2efbbfae97d25674e046f472d1f
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Jul 19 08:43:12 2013 +0200
+
+    Add dependency of zlib-devel package.
+
+M	README
+
+commit 8a0a7707c407e6e361b9f9475adc923f7d478c02
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Jul 19 08:42:29 2013 +0200
+
+    iUse install instead of cp command to avoid "text file busy".
+
+M	Makefile
+
+commit 6a544ec9c0fd5054489f9549b34de447deac5513
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Jul 19 08:41:11 2013 +0200
+
+    Convert /proc interface to proc_create/seq_file.
+    Credits: Gabriel de Perthuis
+
+M	module/netatop.c
+
+commit a530702f4d6cf8607419aec671bc1cbf32e69dba
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Wed Dec 19 08:23:26 2012 +0100
+
+    Show module version in /proc/netatop.
+
+M	module/netatop.c
+
+commit 1acce78c015e9825cb62761cd87f6ec5f4d6aba3
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Wed Dec 19 08:12:19 2012 +0100
+
+    Use mutex instead of spinlock to protect the garbage collector
+    from being called in parallel.
+
+M	module/netatop.c
+
+commit 0d8b252e5345a2d11aa934e2a4635e377423e006
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Mon Dec 17 15:32:49 2012 +0100
+
+    Addition of the kernel thread 'knetatopgc' to issue the
+    garbage collection periodically. This solves a panic
+    situation (mainly on virtual servers) where function find_vpid
+    is called in the context of a thread that is just busy to exit.
+
+M	module/netatop.c
+
+commit 3ae2b983eed4c3b2025593290382eb8bee2939e4
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Tue Dec 4 14:05:50 2012 +0100
+
+    Optimize memory usage by creating slab caches for sockinfo and
+    taskinfo structs, and by increasing the space allowed for
+    sockinfo structs (appeared to be too tight for large servers).
+
+M	module/netatop.c
+
+commit 92512f25ff88db0b1cbc9fbd7109e8655628b6bb
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Mon Nov 19 10:50:41 2012 +0100
+
+    Implemented separate functions for start and stop in init-script.
+
+M	README
+M	netatop.init
+
+commit e51ab1c074f8a27cca8cb8e40014283ca27f10ba
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Mon Nov 19 10:49:07 2012 +0100
+
+    Increased maximum space for taskinfo structs to 2MiB (was 1MiB) and
+    increased counters in /proc/netatop from 9 till 12 positions.
+
+M	module/netatop.c
+
+commit 38698454b44f873f8895cad17306d5ad288fb2dc
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Mon Nov 12 13:24:53 2012 +0100
+
+    Maintain an overflow counter for sockinfo and taskinfo structs that
+    were omitted due to reaching their memory thresholds.
+
+M	module/netatop.c
+D	netatopversion.h
+
+commit ff821a1124451d205ef84c02d17cebd425df6a77
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sat Nov 10 16:29:17 2012 +0100
+
+    Separate spin-locks have been added for the global varibales nrs and nrt
+    due to failed modifications on these variables (specifically nrs).
+
+M	module/netatop.c
+M	netatopversion.h
+
+commit a07903439c87c44d66aa3424610905c7e406c7e1
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Oct 26 10:34:37 2012 +0200
+
+    Added Changelog to archive.
+
+M	mkdistr
+M	netatopversion.h
+
+commit 02e360e54426229afc0c30a2d0b9f751ff934b05
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Oct 26 09:18:47 2012 +0200
+
+    Adapt for proper versioning.
+
+M	mkdistr
+M	netatopversion.h
+
+commit 5f849515d0e0fc66c9dfe2ab36abd482aa4b95f1
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Thu Oct 25 23:21:18 2012 +0200
+
+    emoved automatic chkconfig.
+
+M	Makefile
+
+commit daa8edfd29db9f7c3ed07b24b4c66085c8fdb9e7
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Tue Oct 23 14:45:05 2012 +0200
+
+    Make it possible for atop to dynamically detect netatop(d) per sample.
+
+M	Makefile
+M	README
+M	daemon/netatopd.c
+M	mkdistr
+M	module/netatop.c
+M	netatop.h
+M	netatopd.h
+M	netatopversion.h
+
+commit a500af96306856e4d7dbb29e2ba387a3f592f7ba
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Mon Oct 22 20:52:13 2012 +0200
+
+    Make distribution ready and add man-pages.
+
+M	Makefile
+A	man/netatop.4
+A	man/netatopd.8
+M	mkdistr
+M	netatopversion.h
+
+commit 3c6edf2395dd9b6386cb9f0002a79372a69903c4
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sun Oct 14 15:25:25 2012 +0200
+
+    Bug- and porting-solutions.
+
+M	Makefile
+A	README
+M	daemon/Makefile
+M	daemon/netatopd.c
+A	mkdistr
+A	mkversion
+M	module/Makefile
+M	module/netatop.c
+M	netatop.init
+M	netatopd.h
+A	netatopversion.h
+
+commit 299f306e8d6fb43684fbc8c18cf6d0418ec4407c
+Author: root <root@robin.atcomputing.nl>
+Date:   Sat Sep 15 13:17:39 2012 +0200
+
+    Extra semaphore to indicate if netatopd itself is running.
+
+M	daemon/netatopd.c
+
+commit 621e9fca7ca7b9f078ad8c2ceb302e63c2580952
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Sat Sep 15 12:33:58 2012 +0200
+
+    Correction of start time of process (also taken nanoseconds into account).
+
+M	module/netatop.c
+
+commit 2753b506254d8cc0fb22b67e27dd89ecaf9021db
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Fri Sep 14 23:24:20 2012 +0200
+
+    Introduction of daemon netatopd.
+    Handling of new getsockopt commands.
+
+M	Makefile
+A	daemon/Makefile
+A	daemon/netatopd.c
+A	module/Makefile
+A	module/netatop.c
+D	netatop.c
+M	netatop.h
+M	netatop.init
+A	netatopd.h
+
+commit ca4978d494489150f2af3af4f079330cdc1d7f1f
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Tue Sep 4 17:52:19 2012 +0200
+
+    Complete redesign and rename from atopnet to netatop.
+
+M	Makefile
+D	atopnet.c
+D	atopnet.h
+A	netatop.c
+A	netatop.h
+A	netatop.init
+
+commit 6109d31ecd30dbeaf730b7ca75b860e665a825ba
+Author: Gerlof Langeveld <gerlof@atcomputing.nl>
+Date:   Wed Aug 8 12:00:51 2012 +0200
+
+    Initial setup.
+
+A	Makefile
+A	atopnet.c
+A	atopnet.h

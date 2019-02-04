@@ -1,0 +1,61 @@
+.TH NETATOPD 8 "October 2012" "Linux"
+.SH NAME
+.B netatopd
+- log network statistics of finished processes
+.SH DESCRIPTION
+This manual page documents the 
+.I netatopd
+daemon. This daemon reads the counters of exited processes
+delivered by the
+.I netatop
+module and writes the counters to a logfile.
+.PP
+The 'usual' state of this daemon is the getsockopt()
+command NETATOP_GETCNT_EXIT. With this command,
+.I netatopd
+blocks until an exited task is available on the exitlist of the 
+.I netatop
+module. The obtained netpertask struct that countains the
+counters of an exited process is written to a logfile
+(similar to the process accounting info provided by the base kernel
+itself).
+The daeon stops logging when there is only 5% of free space left
+in the filesystem of the logfile.
+.PP
+The logfile starts with a small header struct that contains a.o. a sequence
+number indicating how many netpertask structs are currently logged.
+This header is mmapped and can be consulted by analysis processes like
+.I atop
+that consult the logfile.
+Behind the header, the netpertask structs can be found in compressed
+form. Every compressed netpertask struct is preceeded by one byte 
+specifying the size of the compressed netpertask struct.
+.PP
+Before an analysis process starts using the logfile, it has to subscribe
+itself by decrementing a semaphore owned by the
+.I netatopd
+daemon. In this way,
+.I netatopd
+knows how many analysis processes are currently using the logfile.
+When no processes use the logfile any more,
+.I netatopd
+truncates the logfile and start building a new one as soon as
+a new subscription of an analysis process is noticed.
+.PP
+.SH FILES
+.PP
+.TP 5
+.B /var/run/netatop.log
+File in which 
+.I netatopd
+writes the compressed accounting records about 
+processes that have finished.
+.SH SEE ALSO
+.B netatop(4),
+.B atop(1),
+.B atopsar(1),
+.B atoprc(5)
+.br
+.B http://www.atoptool.nl
+.SH AUTHOR
+Gerlof Langeveld (gerlof.langeveld@atoptool.nl)
